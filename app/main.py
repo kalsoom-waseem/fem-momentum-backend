@@ -17,7 +17,7 @@ from contextlib import asynccontextmanager
 from app.core.database import init_db
 
 from app.api.v1.router import router as v1_router
-from app.models.profile import UserProfile  # noqa: F401
+from app.models.user import User 
 
 
 
