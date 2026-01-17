@@ -36,6 +36,6 @@ app = FastAPI(title="Fem Momentum", lifespan=lifespan)
 
 app.include_router(v1_router, prefix="/api/v1")
 
-@app.get("/health")
+@app.get("/")
 def health_check():
     return {"status": "ok"}
