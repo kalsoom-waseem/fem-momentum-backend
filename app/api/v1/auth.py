@@ -3,7 +3,7 @@ from sqlmodel import select
 
 from app.api.deps import SessionDep, CurrentUser
 from app.core.security import hash_password, verify_password, create_access_token
-from app.models.user import User
+from app.models.db.user import User
 from app.models.schemas.user import UserCreate, UserRead
 from app.models.schemas.auth import LoginRequest, Token
 

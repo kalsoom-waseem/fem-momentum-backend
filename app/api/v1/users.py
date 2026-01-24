@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from app.api.deps import SessionDep, CurrentUser
-from app.models.user import User
+from app.models.db.user import User
 from app.models.schemas.user import UserRead
 
 router = APIRouter()

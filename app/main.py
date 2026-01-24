@@ -14,18 +14,16 @@ it wires everything together and starts the app.
 
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from app.core.database import init_db
 
 from app.api.v1.router import router as v1_router
-from app.models.user import User 
-
+from app.models.db.user import User
+from app.models.db.activity import Activity
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Runs once at startup (before handling requests)
     print("🚀 Starting application...")
-    init_db()
     print("✅ Database connected and tables ready")
     yield
     print("🛑 Shutting down application...")

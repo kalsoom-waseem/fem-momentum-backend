@@ -11,6 +11,7 @@ from pydantic import BaseModel, EmailStr, Field
 class UserCreate(BaseModel):
     email: EmailStr
     password: str = Field(min_length=8, max_length=128)
+    username: str | None = None
 
     cycle_length_days: int = 28
     period_length_days: int = 5
@@ -23,4 +24,5 @@ class UserRead(BaseModel):
     cycle_length_days: int
     period_length_days: int
     goal: str | None
+    username: str | None = None
     created_at: datetime
