@@ -17,7 +17,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     DATABASE_URL: str
-    SECRET_KEY: str = "change-me-in-prod"
+    SECRET_KEY: str = "super-secret-dev-key-change-later"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
 

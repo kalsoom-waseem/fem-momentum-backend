@@ -1,7 +1,10 @@
-from fastapi import APIRouter, HTTPException
-from sqlmodel import select
+from fastapi import APIRouter, HTTPException, status
+from fastapi.params import Depends
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlmodel import Session, select
 
 from app.api.deps import SessionDep, CurrentUser
+from app.core.database import get_session
 from app.core.security import hash_password, verify_password, create_access_token
 from app.models.db.user import User
 from app.models.schemas.user import UserCreate, UserRead
@@ -29,16 +32,17 @@ def signup(payload: UserCreate, session: SessionDep):
     return user
 
 
-@router.post("/login", response_model=Token)
-def login(payload: LoginRequest, session: SessionDep):
-    user = session.exec(select(User).where(User.email == payload.email)).first()
-    if not user or not verify_password(payload.password, user.hashed_password):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+@router.post("/login")
+def login(form_data: OAuth2PasswordRequestForm = Depends(), session: Session = Depends(get_session),):
+    # form_data.username will contain what you type in Swagger "username"
+    user = session.exec(select(User).where(User.email == form_data.username)).first()
 
-    token = create_access_token(subject=user.email)
-    return Token(access_token=token)
+    if not user or not verify_password(form_data.password, user.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+        )
 
-
-@router.get("/me", response_model=UserRead)
-def me(current_user: CurrentUser):
-    return current_user
+    access_token = create_access_token(user.email)
+  # or subject=user.email
+    return {"access_token": access_token, "token_type": "bearer"}
