@@ -5,6 +5,7 @@ Pydantic schemas for User:
 """
 
 from datetime import datetime
+from typing import Optional
 from pydantic import BaseModel, EmailStr, Field
 
 
@@ -26,3 +27,10 @@ class UserRead(BaseModel):
     goal: str | None
     username: str | None = None
     created_at: datetime
+    model_config = {"from_attributes": True}
+
+class UserUpdate(BaseModel):
+    username: Optional[str] = None
+    cycle_length_days: Optional[int] = None
+    period_length_days: Optional[int] = None
+    goal: Optional[str] = None
