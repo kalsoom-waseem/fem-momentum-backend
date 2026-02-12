@@ -8,6 +8,7 @@ from sqlalchemy.orm import relationship
 
 if TYPE_CHECKING:
     from app.models.db.activity import Activity  # only for type hints
+    from app.models.db.period_log import PeriodLog
 
 
 class User(SQLModel, table=True):
@@ -22,4 +23,5 @@ class User(SQLModel, table=True):
     activities: list["Activity"] = Relationship(
         sa_relationship=relationship("Activity", back_populates="user")
     )
+    period_logs: list["PeriodLog"] = Relationship(back_populates="user")
     created_at: datetime = Field(default_factory=datetime.utcnow)

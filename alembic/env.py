@@ -19,7 +19,7 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from app.core.database import SQLModel  # or from sqlmodel import SQLModel
-from app.models.db import user, activity  # make sure models are imported so metadata is populated
+from app.models.db import user, activity, period_log  # make sure models are imported so metadata is populated
 
 target_metadata = SQLModel.metadata
 
