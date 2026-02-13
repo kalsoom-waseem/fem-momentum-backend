@@ -38,3 +38,22 @@ def add_period_start(payload:PeriodStartCreate, session: SessionDep, current_use
     session.refresh(log)
 
     return {"message": "Period start saved", "period_log_id": log.id}
+
+@router.get("/range", response_model=CycleRangeResponse)
+def get_range(start: date, end: date, session: SessionDep, current_user: CurrentUser):
+    if end < start:
+        raise HTTPException(status_code=400, detail="end must be >= start")
+    if (end - start).days > 366:
+        raise HTTPException(status_code=400, detail="Max range is 366 days")
+
+    log = get_anchor_log(session, current_user.id)
+    cycle_len = log.cycle_length_days or current_user.cycle_length_days
+    period_len = log.period_length_days or current_user.period_length_days
+
+    days = []
+    d = start
+    while d <= end:
+        days.append(day_info(log.start_date, d, cycle_len, period_len))
+        d += timedelta(days=1)
+
+    return {"start": start, "end": end, "days": days}
