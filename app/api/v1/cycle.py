@@ -50,10 +50,13 @@ def get_range(start: date, end: date, session: SessionDep, current_user: Current
     cycle_len = log.cycle_length_days or current_user.cycle_length_days
     period_len = log.period_length_days or current_user.period_length_days
 
+    if not cycle_len or not period_len:
+        raise HTTPException(status_code=400, detail="Cycle or period length not set.")
+
     days = []
     d = start
     while d <= end:
-        days.append(day_info(log.start_date, d, cycle_len, period_len))
+        days.append(day_info(log.start_date, d, period_len, cycle_len))
         d += timedelta(days=1)
 
     return {"start": start, "end": end, "days": days}
